@@ -18,7 +18,6 @@ steps:
       CGO_ENABLED: 0
     commands:
       - go build -o demo-app
-  - name: pushimages
   - name: docker
     image: plugins/docker
     settings:
