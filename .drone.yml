@@ -2,13 +2,13 @@ kind: pipeline
 name: default
 
 steps:
-  - name: linter
-    image: golang:latest
-    environment:
-      GOPROXY: https://mirrors.aliyun.com/goproxy/
-    commands:
-      - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-      - golangci-lint run
+#   - name: linter
+#     image: golang:latest
+#     environment:
+#       GOPROXY: https://mirrors.aliyun.com/goproxy/
+#     commands:
+#       - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+#       - golangci-lint run
 
   - name: build
     image: golang:latest
@@ -20,7 +20,7 @@ steps:
     commands:
       - go build -o demo-app
 
-  - name: docker
+  - name: dockerpush
     image: plugins/docker
     settings:
       registry: 10.114.10.227:8098
@@ -38,28 +38,28 @@ steps:
       event: push
       branch: master
 
-  - name: deploy
-    image: quay.io/ipedrazas/drone-helm
-    environment:
-      STABLE_REPO_URL: https://mirror.azure.cn/kubernetes/charts/
-      SERVICE_ACCOUNT: tiller
-      API_SERVER:
-        from_secret: api_server
-      KUBERNETES_TOKEN:
-        from_secret: kubernetes_token
-      KUBERNETES_CERTIFICATE:
-        from_secret: kubernetes_ca
-    settings:
-      client-only: true
-      wait: true
-      recreate_pods: true
-      chart: ./helm
-      release: drk8d
-      values_files: ["./helm/my-values.yaml"]
-      namespace: kube-ops
-    when:
-      event: push
-      branch: master
+#   - name: deploy
+#     image: quay.io/ipedrazas/drone-helm
+#     environment:
+#       STABLE_REPO_URL: https://mirror.azure.cn/kubernetes/charts/
+#       SERVICE_ACCOUNT: tiller
+#       API_SERVER:
+#         from_secret: api_server
+#       KUBERNETES_TOKEN:
+#         from_secret: kubernetes_token
+#       KUBERNETES_CERTIFICATE:
+#         from_secret: kubernetes_ca
+#     settings:
+#       client-only: true
+#       wait: true
+#       recreate_pods: true
+#       chart: ./helm
+#       release: drk8d
+#       values_files: ["./helm/my-values.yaml"]
+#       namespace: kube-ops
+#     when:
+#       event: push
+#       branch: master
 
   # - name: release
   #   image: plugins/docker
