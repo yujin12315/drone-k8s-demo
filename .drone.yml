@@ -9,8 +9,7 @@ steps:
 #     commands:
 #       - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 #       - golangci-lint run
-
-  - name: build
+  - name: build777
     image: golang:latest
     environment:
       GOPROXY: https://mirrors.aliyun.com/goproxy/
@@ -19,8 +18,7 @@ steps:
       CGO_ENABLED: 0
     commands:
       - go build -o demo-app
-
-  - name: dockerpush
+  - name: docker
     image: plugins/docker
     settings:
       registry: 10.114.10.227:8098
